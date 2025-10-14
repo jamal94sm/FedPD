@@ -86,12 +86,13 @@ if __name__ == "__main__":
     print("\n ]data distribution of devices: \n", num_samples)
 
 
-    #synthetic_public_data = MyUtils.load_synthetic_images(name_classes, 
-    #                                              image_size = dataset["train"]["image"][0].shape[-2:], 
-    #                                              data_dir = "/fs2/comm/kpgrp/sheikholeslami/GenPD/Synthetic_data/CIFAR10")
+    synthetic_public_data = MyUtils.load_synthetic_images(name_classes, 
+                                                  image_size = dataset["train"]["image"][0].shape[-2:], 
+                                                  data_dir = "/project/def-arashmoh/shahab33/GenFKD/Synthetic_Image/CIFAR10",
+                                                  max_per_class=args.num_synth_img_per_class)
 
     
-    synthetic_public_data = original_public_data
+    #synthetic_public_data = original_public_data
   
 
     MyUtils.set_seed(42)
