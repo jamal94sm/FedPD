@@ -168,10 +168,9 @@ import os
 from PIL import Image
 import torchvision.transforms as transforms
 import torch
-import numpy as np
 from datasets import Dataset, DatasetDict
 
-def load_synthetic_images(class_names, image_size, data_dir):
+def load_synthetic_images(class_names, image_size, data_dir, max_per_class=100):
     # Define transform to match CIFAR-10 format
     transform = transforms.Compose([
         transforms.Resize(tuple(image_size)),
@@ -180,23 +179,38 @@ def load_synthetic_images(class_names, image_size, data_dir):
 
     image_tensors = []
     label_tensors = []
+    class_counts = {class_name: 0 for class_name in class_names}
 
-    for filename in os.listdir(data_dir):
-        if filename.lower().endswith(('.png', '.jpg', '.jpeg')):
-            for class_name in class_names:
-                if filename.startswith(class_name):
-                    label = class_names.index(class_name)
-                    image_path = os.path.join(data_dir, filename)
-                    image = Image.open(image_path).convert("RGB")
-                    tensor_image = transform(image)  
-                    image_tensors.append(tensor_image)
-                    label_tensors.append(label)
-                    break
+    # Walk through subdirectories
+    for root, _, files in os.walk(data_dir):
+        for filename in files:
+            if filename.lower().endswith(('.png', '.jpg', '.jpeg')):
+                for class_name in class_names:
+                    # Match class by folder name and check max limit
+                    if class_name.lower() in root.lower() and class_counts[class_name] < max_per_class:
+                        label = class_names.index(class_name)
+                        image_path = os.path.join(root, filename)
+                        try:
+                            image = Image.open(image_path).convert("RGB")
+                            tensor_image = transform(image)
+                            image_tensors.append(tensor_image)
+                            label_tensors.append(label)
+                            class_counts[class_name] += 1
+                        except Exception as e:
+                            print(f"⚠️ Skipping {image_path}: {e}")
+                        break  # stop checking other classes once matched
 
-    train_images = torch.stack(image_tensors)  
+    # Check if we loaded anything
+    if not image_tensors:
+        raise ValueError(f"No images loaded from {data_dir}. "
+                         f"Check folder structure and class_names={class_names}")
+
+    print("✅ Loaded per class:", class_counts)
+
+    train_images = torch.stack(image_tensors)
     train_labels = torch.tensor(label_tensors)
 
-    # Convert to NumPy arrays for Hugging Face compatibility
+    # Convert to Hugging Face Dataset
     train_dataset = Dataset.from_dict({
         "image": train_images,
         "label": train_labels,
