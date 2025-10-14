@@ -1,0 +1,1 @@
+from .fedmd import run
