@@ -27,31 +27,31 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 def main(args):
     
     if args.setup == "local":
-        avg_test_Acc = MyBaselines.run_local(distributed_dataset, num_classes, name_classes, synthetic_public_data, args)
+        avg_test_Acc = MyBaselines.run_local(distributed_dataset, num_classes, name_classes, original_public_data, args)
 
     elif args.setup == "fedavg":
-        avg_test_Acc = MyBaselines.run_fedavg(distributed_dataset, num_classes, name_classes, synthetic_public_data, args)
+        avg_test_Acc = MyBaselines.run_fedavg(distributed_dataset, num_classes, name_classes, original_public_data, args)
 
     elif args.setup == "fedmd_yn":
-        avg_test_Acc = MyBaselines.run_fedmd(distributed_dataset, num_classes, name_classes, synthetic_public_data, args)
+        avg_test_Acc = MyBaselines.run_fedmd(distributed_dataset, num_classes, name_classes, original_public_data, args)
 
     elif args.setup == "fedmd_mix_yn":
         avg_test_Acc = MyBaselines.run_fedmd_mix(distributed_dataset, num_classes, name_classes, synthetic_public_data, args)
 
     elif args.setup == "zero_shot":
-        avg_test_Acc = MyBaselines.run_zero_shot(distributed_dataset, num_classes, name_classes, synthetic_public_data, args)
+        avg_test_Acc = MyBaselines.run_zero_shot(distributed_dataset, num_classes, name_classes, original_public_data, args)
 
     elif args.setup == "open_vocab":
-        avg_test_Acc = MyBaselines.run_open_vocab(distributed_dataset, num_classes, name_classes, synthetic_public_data, args)
+        avg_test_Acc = MyBaselines.run_open_vocab(distributed_dataset, num_classes, name_classes, original_public_data, args)
 
     elif args.setup == "fl_vocab":
-        avg_test_Acc = MyBaselines.run_open_vocab(distributed_dataset, num_classes, name_classes, synthetic_public_data, args)
+        avg_test_Acc = MyBaselines.run_open_vocab(distributed_dataset, num_classes, name_classes, original_public_data, args)
 
     elif args.setup == "sidclip":
-        avg_test_Acc = MyBaselines.run_sid_clip(distributed_dataset, num_classes, name_classes, synthetic_public_data, args)
+        avg_test_Acc = MyBaselines.run_sid_clip(distributed_dataset, num_classes, name_classes, original_public_data, args)
 
     elif args.setup == "koala":
-        avg_test_Acc = MyBaselines.run_koala(distributed_dataset, num_classes, name_classes, synthetic_public_data, original_public_data, args)
+        avg_test_Acc = MyBaselines.run_koala(distributed_dataset, num_classes, name_classes, original_public_data, args)
 
     elif args.setup == "proposed_yn":
         avg_test_Acc = MyBaselines.run_proposed(distributed_dataset, num_classes, name_classes, synthetic_public_data, args)
