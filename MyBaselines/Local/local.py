@@ -9,7 +9,7 @@ def run(distributed_dataset, num_classes, name_classes, public_data, args):
     
 
     clients = [ myPlayers.Device( id, distributed_dataset[id], num_classes, name_classes, public_data, args ) for id in range(args.num_clients) ]
-    clients = clients[:min(len(clients), 3)] #only three of them is enough
+    clients = clients[:min(len(clients), 10)] #only three of them is enough
     
     for round in range(args.rounds):
         print("=" * 20, f" Round {round + 1}/{args.rounds} ", "=" * 20)
